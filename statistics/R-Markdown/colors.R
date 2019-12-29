@@ -1,4 +1,6 @@
-#This r file defines all of the colors to be used later
+# colors
+# This file defines cosntants for all of the colors based on manim
+# by Jack Hester
 
 # Color map
 DARK_BLUE = "#236B8E"
@@ -59,15 +61,8 @@ PINK = "#D147BD"
 LIGHT_PINK = "#DC75CD"
 GREEN_SCREEN = "#00FF00"
 ORANGE = "#FF862F"
-
-# default color scheme for plot command (black background, white labels/text/axes)
-set.plot.colorscheme <- function(scheme) {
-  default.par <- par()
-  if (scheme=='dark'){
-    par(bg="black", col.main=WHITE, col.lab=WHITE, col.axis = WHITE, col=WHITE)
-  }
-  #TODO: add more colorscheme options
-  #else if(){
-  #  
-  #}
-}
+###
+BLUE = "#58C4DD"
+RED = "#FC6255"
+YELLOW = "#FFFF00"
+GREEN = "#83C167"

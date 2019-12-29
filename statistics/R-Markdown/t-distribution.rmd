@@ -11,8 +11,18 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r libraries, include=F, results='hide', echo=F}
 source("colors.R")
+source("plot-themes.R")
+source("animation-engine.R")
+source("frame-builder.R")
+library(sys)
 library(ggplot2)
 library(gganimate)
+library(av)
+library(gifski)
+library(png)
+library(animation)
+library(purrr)
+library(magick)
 ```
 
 # t distribution code 
@@ -24,7 +34,7 @@ x <- seq(-4, 4, length=1000) # set range and how many points to evaluate at (mor
 hx <- dnorm(x)
 
 degf <- c(1, 3, 8, 30)
-colors <- c(YELLOW_A, ORANGE, BLUE_C, RED_E, WHITE)
+colors <- c(YELLOW, ORANGE, BLUE, RED, WHITE)
 labels <- c("df=1", "df=3", "df=8", "df=30", "normal")
 
 # create plot, plot std norm dist
@@ -47,4 +57,47 @@ If you were to
 
 ```{r t_test}
 t.test()
+```
+
+
+```{r DELETE THIS}
+source("plot-themes.R")
+library(gapminder)
+theme <- set.ggplot.colorscheme("dark", FALSE) # color scheme via plot-themes.R
+p <- ggplot(
+  airquality,
+  aes(Day, Temp, group = Month, color = factor(Month))
+  ) +
+  geom_line(size=2) +
+  scale_color_viridis_d() +
+  labs(x = "Day of Month", y = "Temperature") +
+  theme + transition_reveal(Day)
+#p
+#p
+animate.and.save(p, '/Users/jack/Desktop/test2.gif')
+# TODO: make the size of axes and legend bigger
+```
+
+```{r}
+# fill hists and barplots
+x <- rnorm(1000)
+v <- data.frame(x)
+list.of.plots <- list()
+for(i in 1:length(v[,1])){
+  curr.hist.range <- data.frame(v[1:i,])
+  colnames(curr.hist.range) <- c('x')
+  m <- ggplot(curr.hist.range, aes(x=x)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) + theme
+  list.of.plots[[i]] <- m
+}
+
+#TODOL make this barpot so it will show density (out of current number of points)
+
+generatePNGs(list.of.plots)
+png.to.gif(savename='hist.gif')
+
+#TODO: fix the density to make it out of the normal with 0.4 max (divide by total num?)
+
+# mp4
+png.to.mp4(savename="sssss.mp4")
+
 ```
