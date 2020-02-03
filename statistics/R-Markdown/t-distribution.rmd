@@ -23,6 +23,7 @@ library(png)
 library(animation)
 library(purrr)
 library(magick)
+library(rlist)
 ```
 
 # t distribution code 
@@ -56,7 +57,7 @@ If you were to
 ##Comparing the results to the t test command
 
 ```{r t_test}
-t.test()
+#t.test()
 ```
 
 
@@ -74,7 +75,7 @@ p <- ggplot(
   theme + transition_reveal(Day)
 #p
 #p
-animate.and.save(p, '/Users/jack/Desktop/test2.gif')
+animate.and.save.ggplot(p, "D:\\math_animations\\R_tests\\norm_test.gif")
 # TODO: make the size of axes and legend bigger
 ```
 
@@ -90,14 +91,20 @@ for(i in 1:length(v[,1])){
   list.of.plots[[i]] <- m
 }
 
-#TODOL make this barpot so it will show density (out of current number of points)
+#TODO: make this barpot so it will show density (out of current number of points)
 
-generatePNGs(list.of.plots)
-png.to.gif(savename='hist.gif')
+generatePNGs(list.of.plots, "D:\\math_animations\\R_tests\\normal_pngs")
+pngs.to.gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist.gif")
 
 #TODO: fix the density to make it out of the normal with 0.4 max (divide by total num?)
 
-# mp4
-png.to.mp4(savename="sssss.mp4")
+#pngs.to.mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4")
 
+#pngs_to_mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4", frame.rate=10)
+
+pngs_to_gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_gif.gif", frame.rate=10)
+
+pngs_to_hq_gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_gif_hq.gif", fps_val=10)
 ```
+
+
