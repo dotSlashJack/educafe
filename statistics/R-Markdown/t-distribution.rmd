@@ -24,6 +24,7 @@ library(animation)
 library(purrr)
 library(magick)
 library(rlist)
+theme <- set.ggplot.colorscheme("dark", FALSE) # color scheme via plot-themes.R
 ```
 
 # t distribution code 
@@ -62,9 +63,9 @@ If you were to
 
 
 ```{r DELETE THIS}
-source("plot-themes.R")
+
 library(gapminder)
-theme <- set.ggplot.colorscheme("dark", FALSE) # color scheme via plot-themes.R
+
 p <- ggplot(
   airquality,
   aes(Day, Temp, group = Month, color = factor(Month))
@@ -84,25 +85,50 @@ animate.and.save.ggplot(p, "D:\\math_animations\\R_tests\\norm_test.gif")
 x <- rnorm(1000)
 v <- data.frame(x)
 list.of.plots <- list()
+list.of.plots.pdf <- list()
+# normal pdf for comparison
+norm.pdf <- data.frame(dnorm(seq(-4,4,length=10000)))
+colnames(norm.pdf) <- c('x')
+#ggplot(norm.pdf, aes(x=x)) + geom_line()
+#ggplot(data=data.frame(x=c(-4,4)), aes(x)) + stat_function(fun=dnorm, n=101) + scale_c
 for(i in 1:length(v[,1])){
   curr.hist.range <- data.frame(v[1:i,])
+  #curr.hist.range <- data.frame(v[1:i,])
   colnames(curr.hist.range) <- c('x')
+  #colnames(curr.hist.range) <- c('x')
+  # raw number
   m <- ggplot(curr.hist.range, aes(x=x)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) + theme
   list.of.plots[[i]] <- m
+  # PDF
+  #t <- as.data.frame(table(curr.hist.range))
+  #colnames(t) <- c('val','freq')
+  #t$cumulative <- t$freq / nrow(t)
+  #n <- ggplot(data=t, aes(x=val,y=freq)) + geom_bar(stat="identity") + xlim(-4, 4) + theme
+  #n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_line(data=norm.pdf) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
+  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..), binwidth=0.2) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme
+  list.of.plots.pdf[[i]] <- n
 }
-
+#n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
 #TODO: make this barpot so it will show density (out of current number of points)
 
 generatePNGs(list.of.plots, "D:\\math_animations\\R_tests\\normal_pngs")
 pngs.to.gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist.gif")
 
+source('frame-builder.R')
 #TODO: fix the density to make it out of the normal with 0.4 max (divide by total num?)
+generatePNGs(list.of.plots.pdf, "D:\\math_animations\\R_tests\\norm_pdf_pngs")
 
 #pngs.to.mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4")
 
 #pngs_to_mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4", frame.rate=10)
 
-pngs_to_gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_gif.gif", frame.rate=10)
+
+pngs_to_gif(imgpath="D:\\math_animations\\R_tests\\norm_pdf_pngs", savename="D:\\math_animations\\R_tests\\norm_pdf_gif.gif", frame.rate=10)
+
+source('animation-engine.R')
+pngs_to_mp4(imgpath="D:\\math_animations\\R_tests\\norm_pdf_pngs", savename="D:\\math_animations\\R_tests\\norm_pdf_mp4.mp4", frame.rate=10)
+
+pngs_to_gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_pdf_mp4.gif", frame.rate=10)
 
 pngs_to_hq_gif(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_gif_hq.gif", fps_val=10)
 ```

@@ -3,10 +3,9 @@
 # by Jack Hester
 
 # sort items built with the frame in ascending numerical order
-sort.frame.files <- function(list){
-  list <- list.files("D:\\math_animations\\R_tests\\normal_pngs", pattern="*.png$", full.names = T)
+sort.frame.files <- function(dir,list){
+  list <- list.files(dir, pattern="*.png$", full.names = T)
   tmp <- c() # sorted list to return
-  
   # gather the first and number
   first <- strsplit(list[1], "frame")
   
@@ -18,6 +17,7 @@ sort.frame.files <- function(list){
   first <- first[[1]][1]
   
   last <- strsplit(list[length(list)], "frame")
+
   last <- last[[1]][2]
   last <- strsplit(last, ".png")
   
@@ -51,28 +51,6 @@ pngs_to_hq_gif <- function(imgpath=getwd(), savename='animation.gif',fps_val=4){
   print(paste0('Wrote out your animation to: ', savename))
 }
 
-# use this gif creation routine if you don't need every frame (MUCH faster)
-fast.pngs.to.gif <- function(imgpath=getwd(), savename='animation.gif'){
-  png_files <- list.files(imgpath, pattern = ".*png$", full.names = TRUE)
-  gifski(png_files, gif_file = savename, delay = 1)
-}
-
-# mp4
-# imgpath is path to images (defaults to working directory)
-# savename is the path and file name to save to (must end in .mp4)
-pngs.to.mp4 <- function(imgpath=getwd(), savename='animation.mp4'){
-  imgs <- list.files(imgpath, pattern="*.png$", full.names = T)
-  imgs <- sort.frame.files(imgs)
-  saveVideo({
-    for(img in imgs){
-      im <- magick::image_read(img)
-      plot(as.raster(im))
-    }  
-  }, video.name = savename, res=72) #TODO: make the quality and framereate better
-  rm(imgs)
-  print(paste0('Wrote out your animation to: ', savename))
-}
-
 # create gganimation of ggplot with some defaults and save gif
 # savename is path and file name, must end in .gif
 animate.and.save.ggplot <- function(plot, savename){
@@ -88,8 +66,7 @@ animate.and.save.ggplot <- function(plot, savename){
 # savename is the path and file name to save to (must end in .mp4)
 # frame.rate is the framerate you want for the mp4 (defaults to 4, may want to try 10)
 pngs_to_gif <- function(imgpath=getwd(), savename='animation.gif', frame.rate=4){
-  imgs <- list.files(imgpath, pattern="*.png$", full.names = T)
-  imgs <- sort.frame.files(imgs)
+  imgs <- sort.frame.files(imgpath,imgs)
   av::av_encode_video(imgs, output=savename, framerate=frame.rate)
   print(paste0('Wrote out your animation to: ', savename))
 }
@@ -100,8 +77,8 @@ pngs_to_gif <- function(imgpath=getwd(), savename='animation.gif', frame.rate=4)
 # savename is the path and file name to save to (must end in .mp4)
 # frame.rate is the framerate you want for the mp4 (defaults to 4, may want to try 10)
 pngs_to_mp4 <- function(imgpath=getwd(), savename='animation.mp4', frame.rate=4){
-  imgs <- list.files(imgpath, pattern="*.png$", full.names = T)
-  imgs <- sort.frame.files(imgs)
+  #imgs <- list.files(imgpath, pattern="*.png$", full.names = T)
+  imgs <- sort.frame.files(imgpath,imgs)
   av::av_encode_video(imgs, output=savename, framerate=frame.rate)
   print(paste0('Wrote out your animation to: ', savename))
 }
