@@ -89,6 +89,7 @@ list.of.plots.pdf <- list()
 # normal pdf for comparison
 norm.pdf <- data.frame(dnorm(seq(-4,4,length=10000)))
 colnames(norm.pdf) <- c('x')
+bw <- 0.2 # bin width
 #ggplot(norm.pdf, aes(x=x)) + geom_line()
 #ggplot(data=data.frame(x=c(-4,4)), aes(x)) + stat_function(fun=dnorm, n=101) + scale_c
 for(i in 1:length(v[,1])){
@@ -105,9 +106,10 @@ for(i in 1:length(v[,1])){
   #t$cumulative <- t$freq / nrow(t)
   #n <- ggplot(data=t, aes(x=val,y=freq)) + geom_bar(stat="identity") + xlim(-4, 4) + theme
   #n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_line(data=norm.pdf) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
-  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..), binwidth=0.2) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme
+  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..*bw), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme + scale_y_continuous()
   list.of.plots.pdf[[i]] <- n
 }
+list.of.plots.pdf[1]
 #n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
 #TODO: make this barpot so it will show density (out of current number of points)
 
