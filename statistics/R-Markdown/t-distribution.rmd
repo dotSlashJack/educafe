@@ -103,11 +103,13 @@ for(i in 1:len){
   m <- ggplot(curr.hist.range, aes(x=x)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) + theme
   list.of.plots[[i]] <- m
   # PDF
-  adj <- bw/i # adjust for bin width and n non-remaining
-  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..*bw), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
+  # multiplying by the bin width works to make all of the bars equal a total height of 1, but not the area under the curve equaling one
+  adj <-bw*index
+  #print(adj)
+  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
   list.of.plots.pdf[[i]] <- n
 }
-list.of.plots.pdf[9000]
+#list.of.plots.pdf[9000]
 #n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
 #TODO: make this barpot so it will show density (out of current number of points)
 
@@ -116,7 +118,8 @@ list.of.plots.pdf[9000]
 
 #source('frame-builder.R')
 #TODO: fix the density to make it out of the normal with 0.4 max (divide by total num?)
-generatePNGs(list.of.plots.pdf, "D:\\math_animations\\R_tests\\norm_pdf_pngs")
+#generatePNGs(list.of.plots.pdf, "D:\\math_animations\\R_tests\\norm_pdf_pngs")
+generatePNGs(list.of.plots.pdf, "/Users/jack/Desktop/imgs")
 
 #pngs.to.mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4")
 
