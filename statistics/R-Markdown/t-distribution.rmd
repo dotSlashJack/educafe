@@ -104,9 +104,8 @@ for(i in 1:len){
   list.of.plots[[i]] <- m
   # PDF
   # multiplying by the bin width works to make all of the bars equal a total height of 1, but not the area under the curve equaling one
-  adj <-bw*index
   #print(adj)
-  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
+  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density.. / 5), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
   list.of.plots.pdf[[i]] <- n
 }
 #list.of.plots.pdf[9000]
