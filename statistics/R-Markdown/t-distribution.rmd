@@ -82,12 +82,12 @@ animate.and.save.ggplot(p, "D:\\math_animations\\R_tests\\norm_test.gif")
 
 ```{r}
 # fill hists and barplots
-x <- rnorm(10000)
+x <- rnorm(1000)
 v <- data.frame(x)
 list.of.plots <- list()
 list.of.plots.pdf <- list()
 # normal pdf for comparison
-norm.pdf <- data.frame(dnorm(seq(-4,4,length=10000)))
+norm.pdf <- data.frame(dnorm(seq(-4,4,length=1000)))
 colnames(norm.pdf) <- c('x')
 bw <- 0.2 # bin width
 #ggplot(norm.pdf, aes(x=x)) + geom_line()
@@ -105,9 +105,11 @@ for(i in 1:len){
   # PDF
   # multiplying by the bin width works to make all of the bars equal a total height of 1, but not the area under the curve equaling one
   #print(adj)
-  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density.. / 5), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
+  n <- ggplot(data=data.frame(x=c(-4,4)), aes(x)) + geom_histogram(data=curr.hist.range, aes(x=x,y=..density..), binwidth=bw) + stat_function(fun=dnorm, n=101, color=RED, size=1.5) +  xlim(-4, 4) +  theme #+ scale_y_continuous()
   list.of.plots.pdf[[i]] <- n
 }
+generatePNGs(list.of.plots.pdf, "/Users/jack/Desktop/imgs")
+
 #list.of.plots.pdf[9000]
 #n <- ggplot(curr.hist.range, aes(x=x,y=..density..)) + geom_histogram(binwidth=0.2) + xlim(-4, 4) +  theme
 #TODO: make this barpot so it will show density (out of current number of points)
@@ -118,7 +120,7 @@ for(i in 1:len){
 #source('frame-builder.R')
 #TODO: fix the density to make it out of the normal with 0.4 max (divide by total num?)
 #generatePNGs(list.of.plots.pdf, "D:\\math_animations\\R_tests\\norm_pdf_pngs")
-generatePNGs(list.of.plots.pdf, "/Users/jack/Desktop/imgs")
+
 
 #pngs.to.mp4(imgpath="D:\\math_animations\\R_tests\\normal_pngs", savename="D:\\math_animations\\R_tests\\hist_mp4.mp4")
 
